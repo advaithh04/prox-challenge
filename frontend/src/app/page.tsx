@@ -5,6 +5,9 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Send, Loader2, Trash2, Wrench } from 'lucide-react'
 
+// API URL - use Railway backend in production
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://prox-challenge-production-a6f9.up.railway.app'
+
 interface Message {
   role: 'user' | 'assistant'
   content: string
@@ -25,12 +28,12 @@ export default function Home() {
 
   // Fetch status and suggestions on mount
   useEffect(() => {
-    fetch('/api/status')
+    fetch(`${API_URL}/api/status`)
       .then(res => res.json())
       .then(setStatus)
       .catch(console.error)
 
-    fetch('/api/suggested-questions')
+    fetch(`${API_URL}/api/suggested-questions`)
       .then(res => res.json())
       .then(data => setSuggestions(data.questions || []))
       .catch(console.error)
@@ -50,7 +53,7 @@ export default function Home() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/chat/stream', {
+      const response = await fetch(`${API_URL}/api/chat/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text }),
@@ -109,7 +112,7 @@ export default function Home() {
 
   const clearChat = async () => {
     setMessages([])
-    await fetch('/api/clear-history', { method: 'POST' })
+    await fetch(`${API_URL}/api/clear-history`, { method: 'POST' })
   }
 
   return (
