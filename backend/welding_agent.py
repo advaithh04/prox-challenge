@@ -114,7 +114,7 @@ class WeldingAgent:
                 base_url="https://openrouter.ai/api/v1",
                 api_key=self.openrouter_api_key
             )
-            self.model_name = "anthropic/claude-3.5-sonnet"
+            self.model_name = "anthropic/claude-3-haiku-20240307"
             self.model = None
             print(f"Using OpenRouter with {self.model_name}")
         elif self.provider == "gemini":
