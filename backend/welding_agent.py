@@ -114,7 +114,7 @@ class WeldingAgent:
                 base_url="https://openrouter.ai/api/v1",
                 api_key=self.openrouter_api_key
             )
-            self.model_name = "anthropic/claude-3-haiku-20240307"
+            self.model_name = "openai/gpt-4o-mini"
             self.model = None
             print(f"Using OpenRouter with {self.model_name}")
         elif self.provider == "gemini":
@@ -196,8 +196,8 @@ class WeldingAgent:
                 relevant_sections.append(section)
 
         context_parts = []
-        for section in relevant_sections[:5]:
-            context_parts.append(f"=== {section['title']} ===\n{section['content'][:2000]}")
+        for section in relevant_sections[:3]:  # Reduced from 5 to 3 for faster responses
+            context_parts.append(f"=== {section['title']} ===\n{section['content'][:1000]}")
 
         return "\n\n".join(context_parts)
 
@@ -250,7 +250,7 @@ Please provide a comprehensive answer. If visual explanation would help, generat
 
         response = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=4096,
+            max_tokens=1024,
             messages=messages
         )
 
@@ -323,7 +323,7 @@ Please provide a comprehensive answer. If visual explanation would help, generat
 
         response = self.client.messages.create(
             model=self.model_name,
-            max_tokens=4096,
+            max_tokens=1024,
             system=SYSTEM_PROMPT,
             messages=messages
         )
@@ -377,7 +377,7 @@ Please provide a comprehensive answer. If visual explanation would help, generat
 
         stream = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=4096,
+            max_tokens=1024,
             messages=messages,
             stream=True
         )
@@ -438,7 +438,7 @@ Please provide a comprehensive answer. If visual explanation would help, generat
 
         with self.client.messages.stream(
             model=self.model_name,
-            max_tokens=4096,
+            max_tokens=1024,
             system=SYSTEM_PROMPT,
             messages=messages
         ) as stream:
