@@ -14,3 +14,4 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+// Vercel rebuild Sat Apr 11 19:43:32 EDT 2026
