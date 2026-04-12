@@ -35,38 +35,29 @@ CRITICAL INSTRUCTIONS FOR RESPONSES:
 2. **ALWAYS Include Visual Diagrams**: For ANY question about connections, polarity, setup, or procedures, you MUST generate an SVG diagram. This is MANDATORY, not optional.
 
 3. **Diagram Requirements**:
-   - For polarity/connection questions: Draw the welder terminals showing exactly which cable (torch, ground clamp) connects to which terminal (positive +, negative -)
-   - For troubleshooting: Draw a flowchart showing decision points
-   - For settings: Create a visual settings chart
-   - Use clear labels, colors (red for positive, black for negative), and arrows
+   - Keep diagrams SIMPLE and COMPACT - use viewBox="0 0 350 200" max
+   - For polarity: Show ONE setup per diagram (not multiple)
+   - Use basic shapes: circles for terminals, lines for cables, text labels
+   - Colors: red (#e53935) for positive, black (#333) for negative
+   - NO complex markers or defs - keep SVG minimal
 
-4. **Use Markdown for Text**: Use headers, bold, numbered lists for steps, and markdown tables for data.
+4. **Use Markdown for Text**: Headers, bold, numbered lists, markdown tables.
 
-5. **Keep Text Concise**: The diagram should do most of the explaining. Text supports the visual.
+5. **Keep BOTH text and diagrams concise**: Brief explanation + simple diagram.
 
-SVG DIAGRAM FORMAT - You MUST use this exact format:
+SVG FORMAT - Use this EXACT compact format:
 [DIAGRAM]
-<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-  <!-- Your SVG content here -->
-</svg>
-[/DIAGRAM]
-
-EXAMPLE - Polarity Diagram:
-[DIAGRAM]
-<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
-  <rect x="100" y="50" width="200" height="150" fill="#f5f5f5" stroke="#333" stroke-width="2" rx="10"/>
-  <text x="200" y="30" text-anchor="middle" font-weight="bold" font-size="14">WELDER TERMINALS</text>
-  <circle cx="150" cy="120" r="25" fill="#ff4444" stroke="#333" stroke-width="2"/>
-  <text x="150" y="125" text-anchor="middle" fill="white" font-weight="bold" font-size="16">+</text>
-  <text x="150" y="165" text-anchor="middle" font-size="12">POSITIVE</text>
-  <circle cx="250" cy="120" r="25" fill="#333" stroke="#333" stroke-width="2"/>
-  <text x="250" y="125" text-anchor="middle" fill="white" font-weight="bold" font-size="16">-</text>
-  <text x="250" y="165" text-anchor="middle" font-size="12">NEGATIVE</text>
-  <path d="M 150 180 L 150 220 L 80 220" stroke="#ff4444" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
-  <text x="60" y="240" font-size="11" fill="#ff4444">Ground Clamp</text>
-  <path d="M 250 180 L 250 220 L 320 220" stroke="#333" stroke-width="3" fill="none"/>
-  <text x="280" y="240" font-size="11">TIG Torch</text>
-  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#ff4444"/></marker></defs>
+<svg viewBox="0 0 350 180" xmlns="http://www.w3.org/2000/svg">
+<text x="175" y="20" text-anchor="middle" font-weight="bold" font-size="14">TITLE</text>
+<rect x="75" y="35" width="200" height="100" fill="#f5f5f5" stroke="#333" stroke-width="2" rx="8"/>
+<circle cx="125" cy="85" r="22" fill="#e53935"/><text x="125" y="91" text-anchor="middle" fill="white" font-weight="bold">+</text>
+<circle cx="225" cy="85" r="22" fill="#333"/><text x="225" y="91" text-anchor="middle" fill="white" font-weight="bold">-</text>
+<text x="125" y="125" text-anchor="middle" font-size="10">POSITIVE</text>
+<text x="225" y="125" text-anchor="middle" font-size="10">NEGATIVE</text>
+<line x1="125" y1="140" x2="125" y2="160" stroke="#e53935" stroke-width="2"/>
+<text x="125" y="175" text-anchor="middle" font-size="10" fill="#e53935">Ground</text>
+<line x1="225" y1="140" x2="225" y2="160" stroke="#333" stroke-width="2"/>
+<text x="225" y="175" text-anchor="middle" font-size="10">Torch</text>
 </svg>
 [/DIAGRAM]
 
@@ -263,7 +254,7 @@ Keep text explanations brief - let the diagram do the heavy lifting. Use markdow
 
         response = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=1024,
+            max_tokens=2048,
             messages=messages
         )
 
@@ -336,7 +327,7 @@ Keep text explanations brief - let the diagram do the heavy lifting. Use markdow
 
         response = self.client.messages.create(
             model=self.model_name,
-            max_tokens=1024,
+            max_tokens=2048,
             system=SYSTEM_PROMPT,
             messages=messages
         )
@@ -396,7 +387,7 @@ Keep text explanations brief - let the diagram do the heavy lifting. Use markdow
 
         stream = self.client.chat.completions.create(
             model=self.model_name,
-            max_tokens=1024,
+            max_tokens=2048,
             messages=messages,
             stream=True
         )
@@ -457,7 +448,7 @@ Keep text explanations brief - let the diagram do the heavy lifting. Use markdow
 
         with self.client.messages.stream(
             model=self.model_name,
-            max_tokens=1024,
+            max_tokens=2048,
             system=SYSTEM_PROMPT,
             messages=messages
         ) as stream:
