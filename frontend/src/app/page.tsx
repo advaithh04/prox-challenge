@@ -18,6 +18,73 @@ interface SuggestedQuestion {
   questions: string[]
 }
 
+// Component to render message content with embedded diagrams
+function MessageContent({ content }: { content: string }) {
+  // Parse content to extract diagrams and text
+  const parts: { type: 'text' | 'diagram'; content: string }[] = []
+
+  // Split by [DIAGRAM] and [/DIAGRAM] tags
+  const diagramRegex = /\[DIAGRAM\]([\s\S]*?)\[\/DIAGRAM\]/g
+  let lastIndex = 0
+  let match
+
+  while ((match = diagramRegex.exec(content)) !== null) {
+    // Add text before the diagram
+    if (match.index > lastIndex) {
+      const textBefore = content.slice(lastIndex, match.index).trim()
+      if (textBefore) {
+        parts.push({ type: 'text', content: textBefore })
+      }
+    }
+    // Add the diagram
+    parts.push({ type: 'diagram', content: match[1].trim() })
+    lastIndex = match.index + match[0].length
+  }
+
+  // Add remaining text after last diagram
+  if (lastIndex < content.length) {
+    const remainingText = content.slice(lastIndex).trim()
+    if (remainingText) {
+      parts.push({ type: 'text', content: remainingText })
+    }
+  }
+
+  // If no diagrams found, just render as markdown
+  if (parts.length === 0) {
+    return (
+      <div className="prose prose-sm max-w-none">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {content || '...'}
+        </ReactMarkdown>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      {parts.map((part, idx) => {
+        if (part.type === 'diagram') {
+          return (
+            <div
+              key={idx}
+              className="bg-gray-50 rounded-lg p-4 border-2 border-orange-200 flex justify-center"
+              dangerouslySetInnerHTML={{ __html: part.content }}
+            />
+          )
+        } else {
+          return (
+            <div key={idx} className="prose prose-sm max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {part.content}
+              </ReactMarkdown>
+            </div>
+          )
+        }
+      })}
+    </div>
+  )
+}
+
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -186,18 +253,14 @@ export default function Home() {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-lg p-4 ${
+                  className={`max-w-[85%] rounded-lg p-4 ${
                     msg.role === 'user'
                       ? 'bg-orange-600 text-white'
                       : 'bg-white shadow border'
                   }`}
                 >
                   {msg.role === 'assistant' ? (
-                    <div className="prose prose-sm max-w-none">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {msg.content || '...'}
-                      </ReactMarkdown>
-                    </div>
+                    <MessageContent content={msg.content || '...'} />
                   ) : (
                     <p>{msg.content}</p>
                   )}

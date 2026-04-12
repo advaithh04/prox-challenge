@@ -49,3 +49,32 @@ body {
   background: transparent;
   padding: 0;
 }
+
+/* SVG Diagram styling */
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Markdown table styling */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.prose tr:nth-child(even) {
+  background: #f9fafb;
+}
