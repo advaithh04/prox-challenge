@@ -18,8 +18,8 @@ COPY backend/*.py ./
 # Copy PDF files
 COPY files/ ./files/
 
-# Create knowledge directory
-RUN mkdir -p knowledge
+# Copy pre-extracted knowledge base
+COPY knowledge/ ./knowledge/
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
